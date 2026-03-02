@@ -1,0 +1,39 @@
+{
+    "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.24/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.24",
+    "version": "1.0.0",
+    "id": "${{TEAMS_APP_ID}}",
+    "developer": {
+        "name": "Task Meow",
+        "websiteUrl": "https://taskmeow.com",
+        "privacyUrl": "https://taskmeow.com/privacypolicy",
+        "termsOfUseUrl": "https://taskmeow.com/termsofuse"
+    },
+    "icons": {
+        "color": "color.png",
+        "outline": "outline.png"
+    },
+    "name": {
+        "short": "Task Meow Agent (${{APP_NAME_SUFFIX}})",
+        "full": "Task Meow Agent for Copilot"
+    },
+    "description": {
+        "short": "Task Meow to do list agent.",
+        "full": "Task Meow is a simple to do list agent that helps you track the important things in your life."
+    },
+    "accentColor": "#FFFFFF",
+    "composeExtensions": [],
+    "copilotAgents": {
+        "declarativeAgents": [            
+            {
+                "id": "declarativeAgent",
+                "file": "declarativeAgent.json"
+            }
+        ]
+    },
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
+    "validDomains": []
+}

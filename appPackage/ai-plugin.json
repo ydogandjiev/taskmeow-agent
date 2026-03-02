@@ -1,0 +1,185 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.4/schema.json",
+  "schema_version": "v2.4",
+  "name_for_human": "TaskMeow",
+  "description_for_human": "Manage your tasks with TaskMeow - create, view, update, and delete to-do items.",
+  "description_for_model": "Task Meow helps users manage their personal task lists. Users can view all tasks, create new tasks with optional starring for importance, update task titles or starred status, delete tasks, and get an embeddable widget. Tasks can be organized by starred status to highlight important items.",
+  "logo_url": "https://taskmeow.com/favicon.png",
+  "contact_email": "support@taskmeow.com",
+  "legal_info_url": "https://taskmeow.com/termsofuse",
+  "privacy_policy_url": "https://taskmeow.com/privacypolicy",
+  "namespace": "taskmeowagent",
+  "functions": [
+    {
+      "name": "get_tasks",
+      "description": "Retrieve all tasks for the authenticated user. Returns a list of tasks with their IDs, titles, starred status, order, and creation dates. Use this when the user wants to see their task list, check what tasks they have, or find a specific task. The response includes a count of total tasks and a message.",
+      "states": {
+        "reasoning": {
+          "description": "Use this function when the user asks about their tasks, wants to see their to-do list, or needs to find a specific task to update or delete."
+        },
+        "responding": {
+          "description": "Present the tasks in a clear, numbered list. Highlight starred tasks with a ⭐ emoji. Include the count of tasks and group by starred/unstarred if helpful."
+        }
+      }
+    },
+    {
+      "name": "create_task",
+      "description": "Create a new task for the user. Requires a task title and optionally can mark the task as starred. Use this when the user wants to add something to their to-do list, remember something, or create a new task. Returns the newly created task with its assigned ID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title or description of the task to create. Should be clear and actionable."
+          },
+          "starred": {
+            "type": "boolean",
+            "description": "Whether to mark this task as starred/important. Default is false.",
+            "default": "false"
+          }
+        },
+        "required": ["title"]
+      },
+      "states": {
+        "reasoning": {
+          "description": "Use this function when the user wants to add a task, create a reminder, or add something to their to-do list. If the user mentions the task is important or urgent, set starred to true."
+        },
+        "responding": {
+          "description": "Confirm the task was created with its title. If starred, mention it's marked as important with ⭐. Optionally ask if the user wants to add more tasks."
+        }
+      },
+      "capabilities": {
+        "confirmation": {
+          "type": "AdaptiveCard",
+          "title": "Create Task",
+          "body": "Create a new task: {{title}}{{#starred}} (⭐ Starred){{/starred}}?"
+        }
+      }
+    },
+    {
+      "name": "update_task",
+      "description": "Update an existing task's properties including title, starred status, or display order. At least one property must be provided to update. Use this when the user wants to modify a task, rename it, star/unstar it, or reorder it. Returns the updated task.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "description": "Unique identifier of the task to update. Get this from get_tasks first."
+          },
+          "title": {
+            "type": "string",
+            "description": "New title for the task (optional)"
+          },
+          "starred": {
+            "type": "boolean",
+            "description": "New starred status - true to star, false to unstar (optional)"
+          },
+          "order": {
+            "type": "number",
+            "description": "New display order position (optional)"
+          }
+        },
+        "required": ["taskId"]
+      },
+      "states": {
+        "reasoning": {
+          "description": "Use this function when the user wants to modify an existing task. First call get_tasks to find the task ID, then update it with the new properties."
+        },
+        "responding": {
+          "description": "Confirm what was updated (title, starred status, or order). Show the updated task details."
+        }
+      },
+      "capabilities": {
+        "confirmation": {
+          "type": "AdaptiveCard",
+          "title": "Update Task",
+          "body": "Update task: {{title}}?"
+        }
+      }
+    },
+    {
+      "name": "delete_task",
+      "description": "Permanently delete a task. This action cannot be undone. Use this when the user wants to remove a task, mark it as done and remove it, or delete it from their list. Returns confirmation of the deleted task.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "description": "Unique identifier of the task to delete. Get this from get_tasks first."
+          }
+        },
+        "required": ["taskId"]
+      },
+      "states": {
+        "reasoning": {
+          "description": "Use this function when the user wants to delete or remove a task. First call get_tasks to find the task ID if needed. Consider asking for confirmation if the task wasn't explicitly mentioned by the user."
+        },
+        "responding": {
+          "description": "Confirm the task was deleted by showing its title. Mention that the action is permanent."
+        }
+      },
+      "capabilities": {
+        "confirmation": {
+          "type": "AdaptiveCard",
+          "title": "Delete Task",
+          "body": "Permanently delete task: {{title}}? This cannot be undone."
+        }
+      }
+    },
+    {
+      "name": "get_task_widget",
+      "description": "Generate an embeddable HTML widget displaying the user's task list. The widget is interactive and allows viewing and managing tasks visually. Returns HTML code with an iframe pointing to the widget URL. Use this when the user wants a visual representation of their tasks or wants to see an interactive task list.",
+      "states": {
+        "reasoning": {
+          "description": "Use this function when the user asks to see a visual task list, wants an interactive widget, or requests to see their tasks in a more visual format."
+        },
+        "responding": {
+          "description": "Present the widget URL to the user and explain that it shows an interactive task list where they can view, create, star, and delete tasks."
+        }
+      }
+    }
+  ],
+  "runtimes": [
+    {
+      "type": "RemoteMCPServer",
+      "auth": {
+        "type": "OAuthPluginVault",
+        "reference_id": "NzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3IyM5YjkyNzhmYi03M2JjLTQ0NDMtYTI3Mi1mZGYwODRlNDQ4MGQ="
+       },
+       "spec": {
+          "url": "https://taskmeow.com/mcp"
+       },
+       "run_for_functions": [
+        "get_tasks",
+        "create_task",
+        "update_task",
+        "delete_task",
+        "get_task_widget"
+       ]
+    }
+  ],
+  "capabilities": {
+    "conversation_starters": [
+      {
+        "text": "Show me my TaskMeow tasks",
+        "title": "View Tasks"
+      },
+      {
+        "text": "Add 'Buy groceries' to my TaskMeow list",
+        "title": "Create Task"
+      },
+      {
+        "text": "Star my first TaskMeow task",
+        "title": "Star Task"
+      },
+      {
+        "text": "Delete the last task from my TaskMeow list",
+        "title": "Delete Task"
+      },
+      {
+        "text": "Show me a visual widget of my tasks",
+        "title": "Show Widget"
+      }
+    ]
+  }
+}

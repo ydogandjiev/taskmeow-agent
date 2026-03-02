@@ -1,0 +1,35 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.5/schema.json",
+    "version": "v1.5",
+    "name": "Task Meow Agent (${{APP_NAME_SUFFIX}})",
+    "description": "Declarative agent created with Microsoft 365 Agents Toolkit can assist user in calling MCP Servers",
+    "instructions": "$[file('instruction.txt')]",
+    "conversation_starters": [
+      {
+        "text": "Show me my tasks",
+        "title": "View Tasks"
+      },
+      {
+        "text": "Add 'Buy groceries' to my task list",
+        "title": "Create Task"
+      },
+      {
+        "text": "Star my first task",
+        "title": "Star Task"
+      },
+      {
+        "text": "Delete the last task from my list",
+        "title": "Delete Task"
+      },
+      {
+        "text": "Show me a visual widget of my tasks",
+        "title": "Show Widget"
+      }
+    ],
+    "actions": [
+        {
+            "id": "action_1",
+            "file": "ai-plugin.json"
+        }
+    ]
+}
