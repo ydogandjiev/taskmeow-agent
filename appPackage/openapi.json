@@ -132,7 +132,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "enum": ["get_tasks", "create_task", "update_task", "delete_task", "get_task_widget"],
+            "enum": ["get_tasks", "create_task", "update_task", "delete_task", "show_tasks_widget"],
             "description": "Name of the tool to execute"
           },
           "arguments": {

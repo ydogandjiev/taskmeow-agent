@@ -127,8 +127,8 @@
       }
     },
     {
-      "name": "get_task_widget",
-      "description": "Generate an embeddable HTML widget displaying the user's task list. The widget is interactive and allows viewing and managing tasks visually. Returns HTML code with an iframe pointing to the widget URL. Use this when the user wants a visual representation of their tasks or wants to see an interactive task list.",
+      "name": "show_tasks_widget",
+      "description": "Show an embeddable HTML widget displaying the user's task list. The widget is interactive and allows viewing and managing tasks visually. Returns HTML code with an iframe pointing to the widget URL. Use this when the user wants a visual representation of their tasks or wants to see an interactive task list.",
       "states": {
         "reasoning": {
           "description": "Use this function when the user asks to see a visual task list, wants an interactive widget, or requests to see their tasks in a more visual format."
@@ -154,7 +154,7 @@
         "create_task",
         "update_task",
         "delete_task",
-        "get_task_widget"
+        "show_tasks_widget"
        ]
     }
   ],
